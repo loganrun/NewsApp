@@ -41,7 +41,7 @@ public final class QueryUtils {
             Log.e(LOG_TAG,"Problem making Http request", e);
         }
 
-        List<News> articles = extractResponseFromJson(jsonResponse);
+        List<News> articles = extractItemFromJson(jsonResponse);
 
 
         return articles;
@@ -107,7 +107,7 @@ public final class QueryUtils {
 
 
 
-    public static List<News> extractResultsFromJson(String articleJson) {
+    public static List<News> extractItemFromJson(String articleJson) {
         if (TextUtils.isEmpty(articleJson)){
             return null;
         }

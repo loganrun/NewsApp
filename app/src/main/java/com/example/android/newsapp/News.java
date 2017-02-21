@@ -14,9 +14,9 @@ public class News {
         mWeb = web;
     }
 
-    public String getname(){return mName;}
-    public String gettitle(){return mTitle;}
-    public String getweb(){return mWeb;}
+    public String getName(){return mName;}
+    public String getTitle(){return mTitle;}
+    public String getWeb(){return mWeb;}
 
 
 }
