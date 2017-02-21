@@ -22,11 +22,12 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final int NEWS_LOADER_ID = 1;
 
-    private static final String NEWS_SEARCH_REQ = "https://content.guardianapis.com/search?q=";
+    private static final String NEWS_SEARCH_REQ = "https://content.guardianapis.com/search?q=debate%20AND%20economy&tag=politics/politics&from-date=2014-01-01&api-key=test";
+            //"https://content.guardianapis.com/search?q=";
     private NewsAdapter mAdapter;
-    private EditText mBookSearch;
-    private String mBookQuery;
-    private String query;
+    //private EditText mBookSearch;
+    //private String mBookQuery;
+    //private String query;
 
     /** TextView that is displayed when the list is empty */
     private TextView mEmptyStateTextView;
@@ -57,7 +58,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             LoaderManager loaderManager = getLoaderManager();
             loaderManager.initLoader(NEWS_LOADER_ID, null, NewsActivity.this);
             loadingIndicator.setVisibility(View.VISIBLE);
-            hideSoftKeyboard(NewsActivity.this);
+            //hideSoftKeyboard(NewsActivity.this);
 
 
 
@@ -72,14 +73,14 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    public static void hideSoftKeyboard(Activity activity) {
+   /* public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }
+    }*/
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
-        return new NewsLoader(this,query);
+        return new NewsLoader(this,NEWS_SEARCH_REQ);
     }
 
     @Override

@@ -120,32 +120,27 @@ public final class QueryUtils {
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
         try {
 
-            JSONObject root = new JSONObject(articleJson);
-            JSONArray response = root.getJSONArray("response");
+            JSONObject baseJsonResponse = new JSONObject(articleJson);
+            JSONObject response = baseJsonResponse.getJSONObject("response");
+            JSONArray articleArray = response.getJSONArray("results");
 
 
-            for (int i = 0; i < response.length(); i++) {
-                JSONObject article = response.getJSONObject(i);
-                JSONObject results = article.getJSONObject("results");
-                String name = results.getString("sectionName");
-                String title = results.getString("webTitle");
-                String web = results.getString("webUrl");
-                //dateObject = new Date(time);
-                //String dateToDisplay = dateFormatter.format(dateObject);
+            for (int i = 0; i < articleArray.length(); i++) {
+
+                JSONObject currentArticle = articleArray.getJSONObject(i);
+                String name = currentArticle.getString("sectionName");
+                String title = currentArticle.getString("webTitle");
+                String web = currentArticle.getString("webUrl");
 
                 articles.add(new News(name,title,web));
             }
 
 
         }catch(JSONException e){
-            // If an error is thrown when executing any of the above statements in the "try" block,
-            // catch the exception here, so the app doesn't crash. Print a log message
-            // with the message from the exception.
 
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the news JSON results", e);
         }
 
-        // Return the list of earthquakes
         return articles;
     }
 
