@@ -3,14 +3,17 @@ package com.example.android.newsapp;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,6 +50,19 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         articleListView.setAdapter(mAdapter);
         View loadingIndicator = findViewById(R.id.progress_bar);
         loadingIndicator.setVisibility(View.GONE);
+
+        articleListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                News currentNews = mAdapter.getItem(position);
+                Uri articleUri = Uri.parse(currentNews.getWeb());
+
+                Intent webIntent = new Intent(Intent.ACTION_VIEW,articleUri);
+                startActivity(webIntent);
+
+
+            }
+        });
 
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
