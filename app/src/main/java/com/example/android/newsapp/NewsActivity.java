@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -53,6 +54,9 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         View loadingIndicator = findViewById(R.id.progress_bar);
         loadingIndicator.setVisibility(View.GONE);
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.registerOnSharedPreferenceChangeListener(this);
+
         articleListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -91,6 +95,22 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String Key) {
+
+        if (Key.equals(getString(R.string.topics_general_key)) ||
+                Key.equals(getString(R.string.topics_search_terms_key))){
+            mAdapter.clear();
+
+            mEmptyStateTextView.setVisibility(View.GONE);
+
+            View loadingIndicator = findViewById(R.id.progress_bar);
+            loadingIndicator.setVisibility(View.VISIBLE);
+            getLoaderManager().restartLoader(NEWS_LOADER_ID, null,this);
+        }
+
+    }
+
    /* public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
@@ -98,7 +118,24 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
-        return new NewsLoader(this,NEWS_SEARCH_REQ);
+
+            SharedPreferences shareprefs = PreferenceManager.getDefaultSharedPreferences(this);
+            String generalTopics = shareprefs.getString(
+                    getString(R.string.topics_general_key),
+                    getString(R.string.topics_general_default));
+
+            String searchItems = shareprefs.getString(
+                    getString(R.string.topics_search_terms_key),
+                    getString(R.string.topics_search_terms_default));
+
+            Uri baseUri = Uri.parse(NEWS_SEARCH_REQ);
+            Uri.Builder uriBuilder = baseUri.buildUpon();
+
+            uriBuilder.appendQueryParameter("section", generalTopics);
+            uriBuilder.appendQueryParameter("tag", searchItems);
+
+            return new NewsLoader(this, uriBuilder.toString());
+
     }
 
     @Override
@@ -140,8 +177,5 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
 
-    }
 }
