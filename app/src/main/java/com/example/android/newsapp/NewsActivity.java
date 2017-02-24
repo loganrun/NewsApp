@@ -11,6 +11,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -120,6 +122,22 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mAdapter.clear();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if (id == R.id.action_settings){
+            Intent topicsIntent = new Intent(this, TopicsActivity.class);
+            startActivity(topicsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
