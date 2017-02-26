@@ -11,28 +11,20 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by loganrun on 2/23/17.
  */
-public class TopicsActivity extends AppCompatActivity implements Preference.OnPreferenceChangeListener {
+public class TopicsActivity extends AppCompatActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.topics_activity);
     }
 
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object o) {
-        return false;
-    }
 
-
-    public static class NewsPrefernceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+    public static class NewsPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.topics_main);
-
-            Preference generalTopics = findPreference(getString(R.string.topics_general_key));
-            bindPreferenceSummaryToValue(generalTopics);
 
             Preference searchItems = findPreference(getString(R.string.topics_search_terms_key));
             bindPreferenceSummaryToValue(searchItems);
@@ -47,12 +39,8 @@ public class TopicsActivity extends AppCompatActivity implements Preference.OnPr
             onPreferenceChange(preference, preferenceString);
         }
 
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object o) {
-            return false;
-        }
 
-       /* @Override
+        @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
             if (preference instanceof ListPreference) {
@@ -67,7 +55,7 @@ public class TopicsActivity extends AppCompatActivity implements Preference.OnPr
             }
 
             return true;
-        }*/
+        }
 
     }
 }

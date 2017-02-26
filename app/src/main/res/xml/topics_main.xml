@@ -2,22 +2,10 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/topics_menu_item">
-    <!--<ListPreference
-        android:defaultValue="@string/topics_of_interest_default"
-        android:entries="@array/topics_of_interest_labels"
-        android:entryValues="@array/topics_of_interest_values"
-        android:key="@string/topics_of_interest_key"
-        android:title="@string/topics_of_interest_label"/>-->
+
 
     <EditTextPreference
-        android:defaultValue="@string/topics_general_default"
-        android:inputType="textAutoComplete"
-        android:key="@string/topics_general_key"
-        android:selectAllOnFocus="true"
-        android:title="@string/topics_menu_item"/>
-
-    <EditTextPreference
-        android:defaultValue="@string/settings_min_magnitude_by_default"
+        android:defaultValue="@string/topics_search_terms_default"
         android:inputType="textAutoComplete"
         android:key="@string/topics_search_terms_key"
         android:selectAllOnFocus="true"

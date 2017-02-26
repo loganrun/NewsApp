@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="topics_of_interest_labels">
+   <!-- <string-array name="topics_of_interest_labels">
         <item>@string/topics_business_label</item>
         <item>@string/topics_politics_label</item>
         <item>@string/topics_sports_label</item>
@@ -14,6 +14,6 @@
         <item>@string/topics_sports_value</item>
         <item>@string/topics_technology_value</item>
 
-    </string-array>
+    </string-array>-->
 
 </resources>

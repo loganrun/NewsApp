@@ -38,7 +38,7 @@ public final class QueryUtils {
             jsonResponse = makeHttpRequest(url);
         } catch (IOException e) {
             // TODO Handle the IOException
-            Log.e(LOG_TAG,"Problem making Http request", e);
+            Log.e(LOG_TAG, "Problem making Http request", e);
         }
 
         List<News> articles = extractItemFromJson(jsonResponse);
@@ -55,7 +55,7 @@ public final class QueryUtils {
             url = new URL(stringUrl);
         } catch (MalformedURLException e) {
             //
-            Log.e( LOG_TAG, "Error with creating URL", e);
+            Log.e(LOG_TAG, "Error with creating URL", e);
             return null;
         }
         return url;
@@ -84,8 +84,7 @@ public final class QueryUtils {
                 urlConnection.disconnect();
             }
             if (inputStream != null) {
-                // function must handle java.io.IOException here
-                inputStream.close();
+
             }
         }
         return jsonResponse;
@@ -106,18 +105,14 @@ public final class QueryUtils {
     }
 
 
-
     public static List<News> extractItemFromJson(String articleJson) {
-        if (TextUtils.isEmpty(articleJson)){
+        if (TextUtils.isEmpty(articleJson)) {
             return null;
         }
 
-        // Create an empty ArrayList that we can start adding earthquakes to
+
         List<News> articles = new ArrayList<>();
 
-        // Try to parse the SAMPLE_JSON_RESPONSE. If there's a problem with the way the JSON
-        // is formatted, a JSONException exception object will be thrown.
-        // Catch the exception so the app doesn't crash, and print the error message to the logs.
         try {
 
             JSONObject baseJsonResponse = new JSONObject(articleJson);
@@ -128,15 +123,26 @@ public final class QueryUtils {
             for (int i = 0; i < articleArray.length(); i++) {
 
                 JSONObject currentArticle = articleArray.getJSONObject(i);
-                String name = currentArticle.getString("sectionName");
-                String title = currentArticle.getString("webTitle");
-                String web = currentArticle.getString("webUrl");
 
-                articles.add(new News(name,title,web));
+
+                String name;
+
+                if (currentArticle.has("sectionName")) {
+                    name = currentArticle.getString("sectionName");
+                }else{ name="";}
+
+                String title = currentArticle.getString("webTitle");
+
+                String web;
+                if (currentArticle.has("weburl")){
+                    web= currentArticle.getString("webUrl");
+                }else {web="";}
+
+                articles.add(new News(name, title, web));
             }
 
 
-        }catch(JSONException e){
+        } catch (JSONException e) {
 
             Log.e("QueryUtils", "Problem parsing the news JSON results", e);
         }

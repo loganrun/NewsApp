@@ -5,7 +5,7 @@
     tools:context="com.example.android.newsapp.NewsActivity">
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_topics"
         android:title="@string/topics_menu_item"
         android:orderInCategory="1"
         app:showAsAction="ifRoom"/>

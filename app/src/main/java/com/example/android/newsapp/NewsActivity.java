@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,14 +29,10 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final int NEWS_LOADER_ID = 1;
 
-    private static final String NEWS_SEARCH_REQ = "https://content.guardianapis.com/search?q=debate%20AND%20economy&tag=politics/politics&from-date=2014-01-01&api-key=test";
-            //"https://content.guardianapis.com/search?q=";
-    private NewsAdapter mAdapter;
-    //private EditText mBookSearch;
-    //private String mBookQuery;
-    //private String query;
+    private static final String NEWS_SEARCH_REQ = "https://content.guardianapis.com/search?";
 
-    /** TextView that is displayed when the list is empty */
+    private NewsAdapter mAdapter;
+
     private TextView mEmptyStateTextView;
     private static final String LOG_TAG = NewsActivity.class.getSimpleName();
 
@@ -45,8 +42,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
-        ListView articleListView = (ListView)findViewById(R.id.result_list);
-        mEmptyStateTextView = (TextView)findViewById(R.id.empty_text);
+        ListView articleListView = (ListView) findViewById(R.id.result_list);
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_text);
         articleListView.setEmptyView(mEmptyStateTextView);
 
         mAdapter = new NewsAdapter(this, new ArrayList<News>());
@@ -57,13 +54,13 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
 
-        articleListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        articleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 News currentNews = mAdapter.getItem(position);
                 Uri articleUri = Uri.parse(currentNews.getWeb());
 
-                Intent webIntent = new Intent(Intent.ACTION_VIEW,articleUri);
+                Intent webIntent = new Intent(Intent.ACTION_VIEW, articleUri);
                 startActivity(webIntent);
 
 
@@ -80,15 +77,12 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             LoaderManager loaderManager = getLoaderManager();
             loaderManager.initLoader(NEWS_LOADER_ID, null, NewsActivity.this);
             loadingIndicator.setVisibility(View.VISIBLE);
-            //hideSoftKeyboard(NewsActivity.this);
-
-
 
         } else {
 
             loadingIndicator.setVisibility(View.GONE);
 
-            mEmptyStateTextView = (TextView)findViewById(R.id.empty_text);
+            mEmptyStateTextView = (TextView) findViewById(R.id.empty_text);
             mEmptyStateTextView.setText(R.string.no_internet_connection);
 
             return;
@@ -98,43 +92,34 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String Key) {
 
-        if (Key.equals(getString(R.string.topics_general_key)) ||
-                Key.equals(getString(R.string.topics_search_terms_key))){
+        if (Key.equals(getString(R.string.topics_search_terms_key))) {
             mAdapter.clear();
 
             mEmptyStateTextView.setVisibility(View.GONE);
 
             View loadingIndicator = findViewById(R.id.progress_bar);
             loadingIndicator.setVisibility(View.VISIBLE);
-            getLoaderManager().restartLoader(NEWS_LOADER_ID, null,this);
+            getLoaderManager().restartLoader(NEWS_LOADER_ID, null, this);
         }
 
     }
 
-   /* public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }*/
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
 
-            SharedPreferences shareprefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String generalTopics = shareprefs.getString(
-                    getString(R.string.topics_general_key),
-                    getString(R.string.topics_general_default));
+        SharedPreferences shareprefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String searchItems = shareprefs.getString(
+                getString(R.string.topics_search_terms_key),
+                getString(R.string.topics_search_terms_default));
 
-            String searchItems = shareprefs.getString(
-                    getString(R.string.topics_search_terms_key),
-                    getString(R.string.topics_search_terms_default));
+        Uri baseUri = Uri.parse(NEWS_SEARCH_REQ);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
 
-            Uri baseUri = Uri.parse(NEWS_SEARCH_REQ);
-            Uri.Builder uriBuilder = baseUri.buildUpon();
+        uriBuilder.appendQueryParameter("q", searchItems);
+        uriBuilder.appendQueryParameter("api-key", "test");
 
-            uriBuilder.appendQueryParameter("section", generalTopics);
-            uriBuilder.appendQueryParameter("tag", searchItems);
-
-            return new NewsLoader(this, uriBuilder.toString());
+        return new NewsLoader(this, uriBuilder.toString());
 
     }
 
@@ -144,11 +129,11 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         View loadingIndicator = findViewById(R.id.progress_bar);
         loadingIndicator.setVisibility(View.GONE);
 
-        if (articles != null && !articles.isEmpty()){
+        if (articles != null && !articles.isEmpty()) {
             mAdapter.clear();
             mAdapter.addAll(articles);
 
-        }else {
+        } else {
             mEmptyStateTextView.setText(R.string.no_data_found);
         }
 
@@ -162,14 +147,15 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings){
+        if (id == R.id.action_topics) {
             Intent topicsIntent = new Intent(this, TopicsActivity.class);
             startActivity(topicsIntent);
             return true;

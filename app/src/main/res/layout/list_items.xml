@@ -6,15 +6,19 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
         android:id="@+id/date"
-        android:textSize="20sp"/>
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="15sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:textColor="@color/navigationBarColor"
         android:id="@+id/articleTitle"
         android:textAllCaps="true"
-        android:textSize="24sp"/>
+        android:textSize="20sp"/>
 
 
 

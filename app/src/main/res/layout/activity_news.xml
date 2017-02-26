@@ -9,28 +9,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/result_list">
 
-            </ListView>
+        <ListView
+            android:id="@+id/result_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
     </LinearLayout>
 
     <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/progress_bar"
-        android:layout_centerVertical="true"
-        style="@style/Base.Widget.AppCompat.ProgressBar"/>
+        android:layout_centerVertical="true" />
 
     <TextView
+        android:id="@+id/empty_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/empty_text"
-        android:textAllCaps="true"
         android:layout_centerInParent="true"
-        android:textSize="24sp"/>
+        android:textAllCaps="true"
+        android:textSize="24sp" />
 
 
 </RelativeLayout>
